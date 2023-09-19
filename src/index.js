@@ -1,6 +1,10 @@
 const roomCreateBtn = document.getElementById('room_create');
 const roomsId = document.getElementById('rooms');
-const a = document.createElement('div');
+
+roomCreateBtn.addEventListener('click', () => {
+    console.log(window.location.href);
+    window.location.href = window.location.origin + '/room.html';
+});
 
 const roomsList = ['first room', 'second room', 'third room'];
 roomsList.forEach((room) => {
