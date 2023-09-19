@@ -24,3 +24,10 @@ body,
 .room_list {
     color: blueviolet;
 }
+
+#messageContainer {
+    border: 1px solid #ccc;
+    padding: 10px;
+    height: 200px;
+    overflow-y: auto;
+}
