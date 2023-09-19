@@ -1,0 +1,26 @@
+* {
+    box-sizing: border-box;
+}
+
+html,
+body,
+:root {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #eee;
+    flex-direction: column;
+    height: 100%;
+}
+
+.room_main {
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    align-items: center;
+    padding: 0;
+}
+
+.room_list {
+    color: blueviolet;
+}
