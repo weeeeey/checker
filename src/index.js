@@ -1,16 +1,3 @@
-const roomCreateBtn = document.getElementById('room_create');
-const roomsId = document.getElementById('rooms');
+import App from './App.js';
 
-roomCreateBtn.addEventListener('click', () => {
-    console.log(window.location.href);
-    window.location.href = window.location.origin + '/room.html';
-});
-
-const roomsList = ['first room', 'second room', 'third room'];
-
-roomsList.forEach((room) => {
-    liRoom = document.createElement('div');
-    liRoom.className = 'room_list';
-    liRoom.innerHTML = room;
-    roomsId.appendChild(liRoom);
-});
+new App(document.querySelector('.App'));

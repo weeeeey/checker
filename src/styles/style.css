@@ -12,17 +12,38 @@ body,
     flex-direction: column;
     height: 100%;
 }
-
-.room_main {
+.App {
+    border: 1px solid #ccc;
+    background-color: #fff;
+    border-radius: 5px;
+    width: 700px;
+    height: 500px;
     display: flex;
-    flex-direction: column;
-    justify-items: center;
+    justify-content: center;
     align-items: center;
-    padding: 0;
+    position: relative;
 }
 
-.room_list {
-    color: blueviolet;
+.Nickname {
+    border: 2px solid #ccc;
+    background-color: #fff;
+    border-radius: 5px;
+    width: 50%;
+    height: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.Nickname-form {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.Nickname-form > * {
+    margin-bottom: 10px;
 }
 
 #messageContainer {
@@ -30,4 +51,23 @@ body,
     padding: 10px;
     height: 200px;
     overflow-y: auto;
+}
+#editorContainer {
+    position: absolute;
+    left: 0;
+}
+.members {
+    border: 1px solid;
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 28%;
+}
+.members-form {
+    padding: 10px 4px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 90%;
 }

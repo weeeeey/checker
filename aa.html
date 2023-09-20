@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>현재 커서 위치 알아내기</title>
+    </head>
+    <body>
+        <textarea id="myTextarea" rows="5" cols="30"></textarea>
+        <p>현재 커서 위치: <span id="cursorPosition">0</span></p>
+
+        <script>
+            const textarea = document.getElementById('myTextarea');
+            const cursorPosition = document.getElementById('cursorPosition');
+
+            textarea.addEventListener('input', updateCursorPosition);
+            textarea.addEventListener('click', updateCursorPosition);
+            textarea.addEventListener('keyup', updateCursorPosition);
+
+            function updateCursorPosition() {
+                const position = textarea.selectionStart; // 커서의 시작 위치
+                cursorPosition.textContent = position;
+                console.log(typeof position);
+            }
+        </script>
+    </body>
+</html>
