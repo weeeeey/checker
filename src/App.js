@@ -36,7 +36,11 @@ export default function App($app) {
             window.localStorage.setItem('room', JSON.stringify(this.state));
             console.log(this.state);
         };
-        const nickname = new Nickname($app, handleNicknameSubmit);
+        const nickname = new Nickname(
+            $app,
+            this.state.members,
+            handleNicknameSubmit
+        );
         nickname.render();
     };
 

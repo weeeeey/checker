@@ -1,4 +1,4 @@
-export default function Nickname($app, onSubmit) {
+export default function Nickname($app, initialState, onSubmit) {
     this.$target = document.createElement('div');
     this.$target.className = 'Nickname';
 
@@ -13,6 +13,7 @@ export default function Nickname($app, onSubmit) {
                     placeholder="닉네임을 입력하세요."
                     style="padding: 5px"
                 />
+                <div class="Warn"></div>
                 <button id="nickname-entry">입장</button>
             </form>
         `;
@@ -22,9 +23,15 @@ export default function Nickname($app, onSubmit) {
             const input = this.$target.querySelector('#nickname-input');
             const nickname = input.value.trim();
 
-            if (nickname !== '') {
-                // Call the onSubmit callback with the entered nickname
+            const warn = this.$target.querySelector('.Warn');
+
+            if (nickname === '') {
+                warn.innerHTML = '닉네임을 입력하세요';
+            } else if (initialState.includes(nickname)) {
+                warn.innerHTML = '닉네임이 중복됩니다.';
+            } else {
                 onSubmit(nickname);
+                warn.innerHTML = '';
             }
         });
 
