@@ -1,3 +1,6 @@
+import RoomButton from './RoomButton.js';
+import Nickname from './Nickname.js';
+
 export default function App($app) {
     // Initialize your state here if needed
     this.state = {
@@ -9,34 +12,46 @@ export default function App($app) {
         members: [],
         text: '',
     };
-    const $room_make_btn = document.getElementById('room-make');
-    $room_make_btn.addEventListener('click', () => {
+
+    // Check if 'room' key exists in localStorage and set the isRoom state accordingly
+    if (window.localStorage.getItem('room')) {
+        this.state = JSON.parse(window.localStorage.getItem('room'));
+    } else {
+        // If 'room' key doesn't exist, create a RoomButton instance
+        const roomButton = new RoomButton($app, this.state);
+        roomButton.render();
+    }
+
+    // Function to render the Nickname content
+    const renderNicknameContent = () => {
+        const handleNicknameSubmit = (value) => {
+            this.state = {
+                ...this.state,
+                currentUser: {
+                    name: value,
+                    cursor: 0,
+                },
+                members: [...this.state.members, value],
+            };
+            window.localStorage.setItem('room', JSON.stringify(this.state));
+            console.log(this.state);
+        };
+        const nickname = new Nickname($app, handleNicknameSubmit);
+        nickname.render();
+    };
+
+    // If isRoom is true, show Nickname content; otherwise, show the RoomButton
+    if (this.state.isRoom) {
+        renderNicknameContent();
+    }
+
+    // Listen for the 'roomButtonClicked' event triggered by RoomButton
+    document.addEventListener('roomButtonClicked', () => {
+        // Update the state to set isRoom to true
         this.state.isRoom = true;
-
+        // Save the updated state in localStorage
         window.localStorage.setItem('room', JSON.stringify(this.state));
+        // Render the Nickname content
+        renderNicknameContent();
     });
-    this.localStorage = JSON.parse(window.localStorage.getItem('room'));
-    console.log(this.localStorage);
-    // const $target = document.createElement('div');
-    // $target.className = 'Nickname';
-    // $app.append($target);
-
-    // this.render = () => {
-    //     $target.innerHTML = `
-    //         <h2>닉네임 설정</h2>
-    //         <hr style="width: 100%" />
-    //         <div class="Nickname-form">
-    //             <input
-    //                 id="nickname-input"
-    //                 type="text"
-    //                 placeholder="닉네임을 입력하세요."
-    //                 style="padding: 5px"
-    //             />
-    //             <button id="nickname-entry">입장</button>
-    //         </div>
-    //     `;
-    // };
-
-    // // Render the initial content
-    // this.render();
 }

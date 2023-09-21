@@ -1,14 +1,37 @@
-const Nickname = ($app, onClick) => {
-    this.onClick = onClick;
+export default function Nickname($app, onSubmit) {
     this.$target = document.createElement('div');
     this.$target.className = 'Nickname';
-    $app.append(this.$target);
 
     this.render = () => {
-        return `
-        <div>
+        this.$target.innerHTML = `
+            <h2>닉네임 설정</h2>
+            <hr style="width: 100%" />
+            <form  class="Nickname-form">
+                <input
+                    id="nickname-input"
+                    type="text"
+                    placeholder="닉네임을 입력하세요."
+                    style="padding: 5px"
+                />
+                <button id="nickname-entry">입장</button>
+            </form>
         `;
-    };
-};
+        const form = this.$target.querySelector('.Nickname-form');
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const input = this.$target.querySelector('#nickname-input');
+            const nickname = input.value.trim();
 
-export default Nickname;
+            if (nickname !== '') {
+                // Call the onSubmit callback with the entered nickname
+                onSubmit(nickname);
+            }
+        });
+
+        $app.innerHTML = '';
+        $app.append(this.$target);
+    };
+
+    // Render the initial Nickname content
+    this.render();
+}
