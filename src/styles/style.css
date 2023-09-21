@@ -71,6 +71,10 @@ body,
     justify-content: space-between;
     height: 90%;
 }
+.members-form div {
+    margin: 0;
+    padding: 5px;
+}
 
 .Modal {
     z-index: 1;

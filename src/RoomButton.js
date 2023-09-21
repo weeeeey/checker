@@ -1,6 +1,4 @@
-export default function RoomButton($app, initialState) {
-    this.state = initialState;
-
+export default function RoomButton($app) {
     this.$target = document.createElement('button');
     this.$target.id = 'room-make';
     this.$target.innerHTML = '방 만들기';

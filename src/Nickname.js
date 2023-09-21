@@ -1,4 +1,6 @@
-export default function Nickname($app, initialState, onSubmit) {
+export default function Nickname($app, onSubmit) {
+    this.initialState = JSON.parse(window.localStorage.getItem('room')).members;
+
     this.$target = document.createElement('div');
     this.$target.className = 'Nickname';
 
@@ -27,7 +29,7 @@ export default function Nickname($app, initialState, onSubmit) {
 
             if (nickname === '') {
                 warn.innerHTML = '닉네임을 입력하세요';
-            } else if (initialState.includes(nickname)) {
+            } else if (this.initialState.includes(nickname)) {
                 warn.innerHTML = '닉네임이 중복됩니다.';
             } else {
                 onSubmit(nickname);
