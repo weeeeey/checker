@@ -7,24 +7,26 @@
         <link rel="stylesheet" href="./src/styles/style.css" />
     </head>
     <body>
-        <h1>동시 편집 에디터</h1>
+        <h1>로그인 및 방 만들기</h1>
         <main class="App">
-            <!-- <textarea
-                name="editor"
-                id="editorContainer"
-                rows="32"
-                cols="60"
-            ></textarea>
-            <div class="members">
-                <div style="padding: 10px 4px">참여자 목록</div>
-                <hr style="width: 100%; border: 1; margin: 0" />
-                <div class="members-form">
-                    <li class="member-list">asd</li>
-                    <span class="member-alarm">asd 입장</span>
-                </div>
-            </div> -->
+            <button id="room-make">방 만들기</button>
+
+            <div class="Nickname">
+                <h2>닉네임 설정</h2>
+                <hr style="width: 100%" />
+                <form class="Nickname-form">
+                    <input
+                        id="nickname-input"
+                        type="text"
+                        placeholder="닉네임을 입력하세요."
+                        style="padding: 5px"
+                    />
+                    <div id="warn"></div>
+                    <button id="nickname-entry">입장</button>
+                </form>
+            </div>
         </main>
 
-        <script type="module" src="./src/index.js"></script>
+        <script src="./ssrc/index.js"></script>
     </body>
 </html>

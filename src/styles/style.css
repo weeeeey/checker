@@ -34,6 +34,7 @@ body,
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    text-align: center;
 }
 .Nickname-form {
     margin-top: 20px;
@@ -93,7 +94,7 @@ body,
     transform: translate(-50%, -50%);
 }
 
-.Warn {
+#warn {
     color: red;
     font-size: 12px;
 }
