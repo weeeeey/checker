@@ -1,24 +1,15 @@
-<!-- long polling  방식으로 편집 에디터랑 멤버 받아오기  -->
-<!-- https://kamang-it.tistory.com/entry/Webhttp%ED%86%B5%EC%8B%A0%EC%9D%84-%EC%9D%B4%EC%9A%A9%ED%95%9C-%EC%96%91%EB%B0%A9%ED%96%A5-%ED%86%B5%EC%8B%A0%EA%B8%B0%EB%B2%95-long-polling -->
-
-<!-- https://kamang-it.tistory.com/entry/NodeJSExpressWebJavaScriptLong-Polling%EC%9C%BC%EB%A1%9C-%EC%9B%B9-%EC%B1%84%ED%8C%85%EA%B5%AC%ED%98%84http-%EC%96%91%EB%B0%A9%ED%96%A5 -->
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Document</title>
+        <link rel="stylesheet" href="./src/styles/style.css" />
     </head>
     <body>
+        <h1>동시 편집 에디터</h1>
         <main class="App">
-            <h1>동시 편집 에디터</h1>
-            <!-- <textarea
-                name="editor"
-                id="editorContainer"
-                rows="32"
-                cols="60"
-            ></textarea>
+            <textarea id="editorContainer" rows="32" cols="60"></textarea>
             <div class="members">
                 <div style="padding: 10px 4px">참여자 목록</div>
                 <hr style="width: 100%; border: 1; margin: 0" />
@@ -26,7 +17,8 @@
                     <li class="member-list">asd</li>
                     <span class="member-alarm">asd 입장</span>
                 </div>
-            </div> -->
+            </div>
         </main>
+        <script src="./ssrc/Room.js"></script>
     </body>
 </html>
