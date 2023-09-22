@@ -16,3 +16,32 @@ if (!members.some((member) => member.nickname === currntUser)) {
 
 const $editorContainer = document.querySelector('#editorContainer');
 const members_form = document.querySelector('.members-form');
+const cursor = document.createElement('div');
+
+$editorContainer.value = textareaData;
+
+window.addEventListener('storage', (e) => {
+    if (e.key == 'room') {
+        const newData = JSON.parse(e.newValue);
+        const newMembers = newData.members;
+
+        if (newMembers.length != members.length) {
+            const addedMember = newMembers[members.length];
+            members.append(addedMember);
+        } else {
+            $editorContainer.value = newData.textareaData;
+            textareaData = newData.textareaData;
+        }
+    }
+});
+
+$editorContainer.addEventListener('input', () => {
+    let state = {
+        members,
+        textareaData: $editorContainer.value,
+    };
+    window.localStorage.setItem('room', JSON.stringify(state));
+});
+
+$editorContainer.selectionStart = 10;
+$editorContainer.selectionEnd = 10;
