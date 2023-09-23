@@ -12,7 +12,7 @@ let state = {
 
 if (window.localStorage.getItem('room')) {
     const temp = document.createElement('div');
-    temp.innerHTML = 'editor room이 존재합니다';
+    temp.innerHTML = 'editor room이 존재합니다. 닉네임으로 접속해보세요.';
     temp.style.color = 'red';
     App.insertBefore(temp, App.firstChild);
     $roomBtn.style.display = 'none';
@@ -37,7 +37,7 @@ const handleNicknameForm = (value) => {
     } else {
         localData = {
             ...localData,
-            members: [...localData.members, { nickname: value, position: 0 }],
+            members: [...localData.members, { nickname: value, x: 0, y: 0 }],
         };
         window.localStorage.setItem('room', JSON.stringify(localData));
         window.location.href =

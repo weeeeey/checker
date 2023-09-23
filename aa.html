@@ -25,61 +25,17 @@
     </head>
     <body>
         <div id="textarea-container">
-            <textarea id="textarea" autofocus rows="4" cols="50"></textarea>
+            <textarea id="textarea" autofocus rows="4" cols="50"> </textarea>
             <span id="cursor-marker" class="cursor-marker">|</span>
         </div>
 
         <script>
             const textarea = document.getElementById('textarea');
-            const cursorMarker = document.getElementById('cursor-marker');
-
-            // textarea에 입력, 클릭, 스크롤 이벤트 리스너 추가
-            textarea.addEventListener('input', updateCursorMarker);
-            textarea.addEventListener('click', updateCursorMarker);
-            textarea.addEventListener('scroll', updateCursorMarker);
-            textarea.addEventListener('keydown', updateCursorMarker);
-            // 초기 커서 위치 설정
-            updateCursorMarker();
-
-            function updateCursorMarker() {
-                const cursorPosition = textarea.selectionEnd;
-                console.log(cursorPosition);
-                const textBeforeCursor = textarea.value.substring(
-                    0,
-                    cursorPosition
-                );
-                const linesBeforeCursor = textBeforeCursor.split('\n');
-                const currentLineNumber = linesBeforeCursor.length - 1;
-                const currentLineOffset =
-                    linesBeforeCursor[currentLineNumber].length;
-
-                // 계산된 커서 위치를 텍스트 너비로 변환
-                const textWidthBeforeCursor = getTextWidth(
-                    textBeforeCursor,
-                    textarea
-                );
-
-                // 줄바꿈에 따른 높이 계산
-                const lineHeight = parseFloat(
-                    getComputedStyle(textarea).lineHeight
-                );
-                const topOffset = currentLineNumber * lineHeight;
-
-                cursorMarker.style.left = `${textWidthBeforeCursor}px`;
-                cursorMarker.style.top = `${topOffset}px`;
-            }
-
-            function getTextWidth(text, element) {
-                const span = document.createElement('span');
-                span.style.font = window.getComputedStyle(element).font;
-                span.style.visibility = 'hidden';
-                span.textContent = text;
-                document.body.appendChild(span);
-                const width = span.offsetWidth;
-                console.log('asd', width);
-                document.body.removeChild(span);
-                return width;
-            }
+            textarea.addEventListener('input', (v) => {
+                console.log('left', textarea.offsetLeft);
+                console.log('top', textarea.offsetTop);
+                console.log('=====');
+            });
         </script>
     </body>
 </html>

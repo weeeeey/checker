@@ -1,17 +1,21 @@
 const url = new URL(window.location.href);
 let currntUser = url.searchParams.get('nickname');
 
+if (!window.localStorage.getItem('room')) {
+    window.location.href = window.location.origin;
+    console.log('방을 만드세요.');
+}
 let localData = JSON.parse(window.localStorage.getItem('room'));
 let members = localData.members;
 let textareaData = localData.textareaData;
 
 if (!currntUser) {
-    console.log('로그인 하세요.'); //alert 창으로 대체 할 것
     window.location.href = window.location.origin + `/index.html`;
+    console.log('로그인 하세요.'); //alert 창으로 대체 할 것
 }
 if (!members.some((member) => member.nickname === currntUser)) {
-    console.log('닉네임이 존재하지 않습니다.'); //alert 창으로 대체 할 것
     window.location.href = window.location.origin + `/index.html`;
+    console.log('닉네임이 존재하지 않습니다.'); //alert 창으로 대체 할 것
 }
 
 const $editorContainer = document.querySelector('#editorContainer');
@@ -47,9 +51,6 @@ window.addEventListener('storage', (e) => {
 
             member_alarm.innerHTML = '';
             member_alarm.innerHTML = `${addedMember.nickname} 님이 입장했습니다.`;
-        } else {
-            $editorContainer.value = newData.textareaData;
-            textareaData = newData.textareaData;
         }
     }
 });
@@ -62,48 +63,45 @@ $editorContainer.addEventListener('input', () => {
     window.localStorage.setItem('room', JSON.stringify(state));
 });
 
+// 커서 마커
 const createMarker = () => {
     const marker = document.createElement('div');
-    marker.className = cursor - marker;
+    marker.offsetTop;
+    marker.offsetLeft;
+    marker.className = 'cursor-marker';
     marker.textContent = currntUser;
     return marker;
 };
 
-const getCursorXY = (input, selectionPoint) => {
-    const { offsetLeft: inputX, offsetTop: inputY } = input;
-    const div = document.createElement('div');
-    const copyStyle = getComputedStyle(input);
-    for (const prop of copyStyle) {
-        div.style[prop] = copyStyle[prop];
+// textarea End Cursor 위치를 통해 마커가 표시 될 x,y 값 구하기
+const getCursorXY = (text, selectionEndPoint) => {
+    const { offsetTop: textTop, offsetLeft: textLeft } = text;
+    const tempDiv = document.createElement('div');
+    const copyStyle = getComputedStyle(text);
+    for (let prop of copyStyle) {
+        tempDiv.style[prop] = copyStyle[prop];
     }
-    const swap = '.';
-    const inputValue =
-        input.tagName === 'INPUT'
-            ? input.value.replace(/ /g, swap)
-            : input.value;
-    // set the div content to that of the textarea up until selection
-    const textContent = inputValue.substr(0, selectionPoint);
-    // set the text content of the dummy element div
-    div.textContent = textContent;
-    if (input.tagName === 'TEXTAREA') div.style.height = 'auto';
-    // if a single line input then the div needs to be single line and not break out like a text area
-    if (input.tagName === 'INPUT') div.style.width = 'auto';
-    // create a marker element to obtain caret position
-    const span = document.createElement('span');
-    // give the span the textContent of remaining content so that the recreated dummy element is as close as possible
-    span.textContent = inputValue.substr(selectionPoint) || '.';
-    // append the span marker to the div
-    div.appendChild(span);
-    // append the dummy element to the body
-    document.body.appendChild(div);
-    // get the marker position, this is the caret position top and left relative to the input
-    const { offsetLeft: spanX, offsetTop: spanY } = span;
-    // lastly, remove that dummy element
-    // NOTE:: can comment this out for debugging purposes if you want to see where that span is rendered
-    document.body.removeChild(div);
-    // return an object with the x and y of the caret. account for input positioning so that you don't need to wrap the input
-    return {
-        x: inputX + spanX,
-        y: inputY + spanY,
-    };
+    const textValue = text.value;
+    const selectedTextContent = textValue.substr(0, selectionEndPoint);
+    tempDiv.textContent = selectedTextContent;
+    tempDiv.style.height = 'auto';
+
+    const tempSpan = document.createElement('span');
+    tempSpan.textContent = textValue.substr(selectionEndPoint);
+    tempDiv.appendChild(tempSpan);
+    document.body.appendChild(tempDiv);
+    const { offsetTop: tempTop, offsetLeft: tempLeft } = tempSpan;
+    document.body.removeChild(tempDiv);
+
+    const x = textTop + tempTop;
+    const y = textLeft + tempLeft;
+    for (let i = 0; i < members.length; i++) {
+        if (members[i].nickname === currntUser) {
+            members[i].x = x;
+            members[i].y = y;
+            break;
+        }
+    }
+
+    return { x, y };
 };
