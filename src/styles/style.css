@@ -55,6 +55,8 @@ body,
 #editorContainer {
     position: absolute;
     left: 0;
+    resize: none;
+    padding: 10px;
 }
 .members {
     border: 1px solid;
@@ -76,16 +78,75 @@ body,
     padding: 5px;
 }
 
+.member-alarm {
+    color: #07ccff;
+}
+
 #warn {
     color: red;
     font-size: 12px;
 }
 
-.cursor {
+.cursor-marker {
     position: absolute;
     background-color: red;
-    width: 2px;
+    width: 1px;
     height: 100%;
     pointer-events: none;
     z-index: 1;
+    bottom: 0;
 }
+
+.input
+  $line-height = 16px
+  $font-size = 16px
+  $color = #111
+  border 0
+  border-radius 4px
+  color $color
+  font-size $font-size
+  line-height $line-height
+  outline 0
+  padding 10px 12px
+  position relative
+  text-align left
+  width   230px
+  &::placeholder
+    color lighten($color, 80%)
+    text-align center
+  &__marker
+    $marker-color = #111
+    background-color $marker-color
+    border-radius 4px
+    box-shadow 0 2px 5px lighten($marker-color, 30%)
+    display block
+    font-size 12px
+    padding 4px 6px
+    position absolute
+    transform translate(5%, -70%)
+    transition top .1s ease 0s, left .1s ease 0s
+    white-space nowrap
+    width  auto
+    z-index 9999
+    &:after
+      background-color $marker-color
+      content ''
+      height 10px
+      position absolute
+      width  15px
+      z-index -1
+    &--position
+      &:after
+        bottom 0
+        left 0
+        transform translate(-10%, 10%) rotate(-15deg) skewX(-40deg)
+    &--selection
+      transform translate(-50%, -100%)
+      &:after
+        bottom 0
+        left 50%
+        transform translate(-50%, 0) rotate(45deg)
+    &--custom
+      transform translate($font-size, $line-height)
+      &:after
+        display none
