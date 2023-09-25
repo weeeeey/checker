@@ -23,97 +23,105 @@ const members_form = document.querySelector('.members-form');
 const member_list = document.querySelector('.member-list');
 const member_alarm = document.querySelector('.member-alarm');
 
-$editorContainer.value = textareaData;
-member_alarm.innerHTML = `${
-    members[members.length - 1].nickname
-} 님이 입장했습니다.`;
-members.forEach((member) => {
-    const element = document.createElement('div');
-    element.innerHTML = member.nickname;
-    member_list.append(element);
-});
+// 마커 랜덤 색
 
-// ******  커서 마커 구현 부분  *********
-
-const setMemberPosition = (x, y) => {
-    for (let i = 0; i < members.length; i++) {
-        if (members[i].nickname === currntUser) {
-            members[i].x = x;
-            members[i].y = y;
-            break;
-        }
+const getCursorXY = (text, selectionPoint) => {
+    const { offsetLeft: textX, offsetTop: textY } = text;
+    const p = document.createElement('p');
+    const copyStyle = getComputedStyle(text);
+    for (const prop of copyStyle) {
+        p.style[prop] = copyStyle[prop];
     }
+
+    const textValue = text.value;
+    const textContent = textValue.substr(0, selectionPoint);
+    p.textContent = textContent;
+    p.style.height = 'auto';
+
+    const span = document.createElement('span');
+    span.textContent = textValue.substr(selectionPoint) || '.';
+    p.appendChild(span);
+    document.body.appendChild(p);
+    const { offsetLeft: spanX, offsetTop: spanY } = span;
+    document.body.removeChild(p);
+
+    members.forEach((member) => {
+        if (member.nickname === currntUser) {
+            member.x = textX + spanX;
+            member.y = textY + spanY;
+        }
+    });
 };
-const createMarker = (nickname) => {
-    const marker = document.createElement('div');
-    marker.className = 'cursor-marker';
-    marker.textContent = nickname;
+
+const createMarker = (content) => {
+    const marker = document.createElement('span');
+    marker.className = `text__marker ${content}`;
+    marker.textContent = content;
+
     return marker;
 };
 
-// textarea End Cursor 위치를 통해 마커가 표시 될 x,y 값 구하기
-const getCursorXY = (text, selectionEndPoint) => {
-    const { offsetTop: textTop, offsetLeft: textLeft } = text;
-    const tempP = document.createElement('p');
-    const copyStyle = getComputedStyle(text);
-    for (let prop of copyStyle) {
-        tempP.style[prop] = copyStyle[prop];
-    }
-    const textValue = text.value;
-    const selectedTextContent = textValue.substr(0, selectionEndPoint);
-    tempP.textContent = selectedTextContent;
-    tempP.style.height = 'auto';
-
-    const tempSpan = document.createElement('span');
-    tempSpan.textContent = textValue.substr(selectionEndPoint);
-    tempP.appendChild(tempSpan);
-    document.body.appendChild(tempP);
-    const { offsetTop: tempTop, offsetLeft: tempLeft } = tempSpan;
-    document.body.removeChild(tempP);
-
-    const x = textTop + tempTop;
-    const y = textLeft + tempLeft;
-    setMemberPosition(x, y);
-
-    return { x, y };
-};
-
-const showingCursor = (text) => {
+const showMarker = (text) => {
     const {
-        offsetTop,
         offsetLeft,
+        offsetTop,
         offsetHeight,
         offsetWidth,
-        scrollTop,
         scrollLeft,
+        scrollTop,
     } = text;
-
     const { lineHeight, paddingRight } = getComputedStyle(text);
-    const members = JSON.parse(window.localStorage.getItem('room')).members;
+
     for (const member of members) {
+        if (member.nickname === currntUser) {
+            continue;
+        }
         const { x, y } = member;
-        // left position에 대해 left position의 최대값은 text 가로폭 - right 패딩값
-        // text의 현재 가로 스크롤 값도 계산
+        if (x === 0 && y === 0) {
+            continue;
+        }
+
+        const existingMarker = document.querySelector(
+            `.text__marker.${member.nickname}`
+        );
+        if (existingMarker) {
+            document.body.removeChild(existingMarker);
+        }
+
+        text.__MARKER = createMarker(member.nickname);
+        document.body.appendChild(text.__MARKER);
+
         const newLeft = Math.min(
             x - scrollLeft,
             offsetLeft + offsetWidth - parseInt(paddingRight, 10)
         );
-        // top position에 대해 최대값은 text 높이 - line 높이
-        // text의 세로 스크롤 값 위치도 계산
         const newTop = Math.min(
             y - scrollTop,
             offsetTop + offsetHeight - parseInt(lineHeight, 10)
         );
-        text._MARKER = createMarker(member.nickname);
-        text.appendChild(text._MARKER);
-        text._MARKER.setAttribute(
+
+        text.__MARKER.setAttribute(
             'style',
-            `left:${newLeft}px ; top:${newTop}px `
+            `left: ${newLeft}px; top: ${newTop}px; `
         );
+        const tempSpan = document.createElement('span');
+        tempSpan.className = 'text__marker__arrow';
+        text.__MARKER.append(tempSpan);
     }
 };
 
-// showingCursor($editorContainer);
+window.addEventListener('load', () => {
+    $editorContainer.value = textareaData;
+    member_alarm.innerHTML = `${
+        members[members.length - 1].nickname
+    } 님이 입장했습니다.`;
+    members.forEach((member) => {
+        const element = document.createElement('div');
+        element.innerHTML = member.nickname;
+        member_list.append(element);
+    });
+    showMarker($editorContainer);
+});
 
 window.addEventListener('storage', (e) => {
     if (e.key == 'room') {
@@ -131,22 +139,21 @@ window.addEventListener('storage', (e) => {
             member_alarm.innerHTML = '';
             member_alarm.innerHTML = `${addedMember.nickname} 님이 입장했습니다.`;
         } else {
-            $editorContainer.value = JSON.parse(
-                window.localStorage.getItem('room')
-            ).textareaData;
+            const temp = JSON.parse(window.localStorage.getItem('room'));
+            $editorContainer.value = temp.textareaData;
+            members = JSON.parse(JSON.stringify(temp.members));
+            showMarker($editorContainer);
         }
     }
 });
 
 $editorContainer.addEventListener('input', () => {
     getCursorXY($editorContainer, $editorContainer.selectionEnd);
-
     let state = {
         members,
         textareaData: $editorContainer.value,
     };
     window.localStorage.setItem('room', JSON.stringify(state));
-    showingCursor($editorContainer);
 });
 
 $editorContainer.addEventListener('click', () => {
@@ -156,5 +163,5 @@ $editorContainer.addEventListener('click', () => {
         textareaData: $editorContainer.value,
     };
     window.localStorage.setItem('room', JSON.stringify(state));
-    showingCursor($editorContainer);
+    showMarker($editorContainer);
 });

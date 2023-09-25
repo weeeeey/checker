@@ -37,7 +37,7 @@ const handleNicknameForm = (value) => {
     } else {
         localData = {
             ...localData,
-            members: [...localData.members, { nickname: value, x: 8, y: 10 }],
+            members: [...localData.members, { nickname: value, x: 0, y: 0 }],
         };
         window.localStorage.setItem('room', JSON.stringify(localData));
         window.location.href =
